@@ -52,8 +52,11 @@ int main(int argc, char **argv)
     char *matchingUUID = NULL;
     matchingUUID = (char*)calloc(500 + 1, sizeof(char));
 
+    int foundUUID = 0;
+
     while ((row = mysql_fetch_row(result))) 
     {
+        foundUUID = 1;
         for(int i = 0; i < num_fields; i++) 
         {
             printf("%s ", row[i] ? row[i] : "NULL"); 
@@ -62,7 +65,7 @@ int main(int argc, char **argv)
         matchingUUID = row[1];
     }
 
-    if (matchingUUID == NULL)
+    if (foundUUID == 1)
     {
         printf("Found UUID: %s\n", matchingUUID);
     }
