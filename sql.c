@@ -9,6 +9,35 @@ void finish_with_error(MYSQL *con)
     exit(1);
 }
 
+char* getUUIDForIP(MYSQL con, char* ipAddr) {
+    char q[1000] = "SELECT * FROM ipmap WHERE ip='";
+    strcat(q, ipAddr);
+    strcat(q, "'");
+    printf("Query: %s\n", q);
+
+    if (mysql_query(con, q))
+    {
+        finish_with_error(con);
+    }
+
+    MYSQL_RES *result = mysql_store_result(con);
+
+    if (result == NULL) 
+    {
+        finish_with_error(con);
+    }
+
+    MYSQL_ROW row;
+
+    while ((row = mysql_fetch_row(result))) 
+    {
+        return row[1];
+    }
+
+    printf("No UUID found\n");
+    return "GENERATE_ME";
+}
+
 int main(int argc, char **argv)
 {
     printf("MySQL client version: %s\n", mysql_get_client_info());
@@ -28,51 +57,8 @@ int main(int argc, char **argv)
         finish_with_error(con);
     }
 
-    char q[1000] = "SELECT * FROM ipmap WHERE ip='";
-    strcat(q, "127.0.0.1");
-    strcat(q, "'");
-    printf("Query: %s\n", q);
-
-    if (mysql_query(con, q))
-    {
-        finish_with_error(con);
-    }
-
-    MYSQL_RES *result = mysql_store_result(con);
-
-    if (result == NULL) 
-    {
-        finish_with_error(con);
-    }
-
-    int num_fields = mysql_num_fields(result);
-
-    MYSQL_ROW row;
-
-    char *matchingUUID = NULL;
-    matchingUUID = (char*)calloc(500 + 1, sizeof(char));
-
-    int foundUUID = 0;
-
-    while ((row = mysql_fetch_row(result))) 
-    {
-        foundUUID = 1;
-        for(int i = 0; i < num_fields; i++) 
-        {
-            printf("%s ", row[i] ? row[i] : "NULL"); 
-        }
-        printf("\n");
-        matchingUUID = row[1];
-    }
-
-    if (foundUUID == 1)
-    {
-        printf("Found UUID: %s\n", matchingUUID);
-    }
-    else
-    {
-        printf("No UUID found\n");
-    }
+    getUUIDForIP(con, "127.0.0.1");
+    getUUIDForIP(con, "127.0.0.2");
 
     mysql_free_result(result);
     mysql_close(con);
