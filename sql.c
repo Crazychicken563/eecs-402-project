@@ -28,11 +28,12 @@ int main(int argc, char **argv)
         finish_with_error(con);
     }
 
-    char a[1000] = "SELECT * FROM ipmap WHERE ip='";
-    strcat(a, "127.0.0.1");
-    strcat(a, "'");
+    char q[1000] = "SELECT * FROM ipmap WHERE ip='";
+    strcat(q, "127.0.0.1");
+    strcat(q, "'");
+    printf("Query: %s\n", q);
 
-    if (mysql_query(con, a))
+    if (mysql_query(con, q))
     {
         finish_with_error(con);
     }
