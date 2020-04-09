@@ -49,7 +49,8 @@ int main(int argc, char **argv)
 
     MYSQL_ROW row;
 
-    char[500] matchingUUID = NULL;
+    char *matchingUUID = NULL;
+    matchingUUID = (char*)calloc(500 + 1, sizeof(char));
 
     while ((row = mysql_fetch_row(result))) 
     {
