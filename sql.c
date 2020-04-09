@@ -1,5 +1,6 @@
 #include <my_global.h>
 #include <mysql.h>
+#include <string.h>
 
 void finish_with_error(MYSQL *con)
 {
@@ -25,9 +26,13 @@ int main(int argc, char **argv)
     ) == NULL)
     {
         finish_with_error(con);
-    }    
+    }
 
-    if (mysql_query(con, "SELECT * FROM ipmap")) 
+    char a[1000] = "SELECT * FROM ipmap WHERE ip='";
+    strcat(a, "127.0.0.1");
+    strcat(a, "'");
+
+    if (mysql_query(con, a))
     {
         finish_with_error(con);
     }
@@ -44,12 +49,12 @@ int main(int argc, char **argv)
     MYSQL_ROW row;
 
     while ((row = mysql_fetch_row(result))) 
-    { 
+    {
         for(int i = 0; i < num_fields; i++) 
-        { 
+        {
             printf("%s ", row[i] ? row[i] : "NULL"); 
-        } 
-        printf("\n"); 
+        }
+        printf("\n");
     }
 
     mysql_free_result(result);
