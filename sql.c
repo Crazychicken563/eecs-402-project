@@ -49,6 +49,8 @@ int main(int argc, char **argv)
 
     MYSQL_ROW row;
 
+    char[500] matchingUUID = NULL;
+
     while ((row = mysql_fetch_row(result))) 
     {
         for(int i = 0; i < num_fields; i++) 
@@ -56,6 +58,16 @@ int main(int argc, char **argv)
             printf("%s ", row[i] ? row[i] : "NULL"); 
         }
         printf("\n");
+        matchingUUID = row[1];
+    }
+
+    if (matchingUUID == NULL)
+    {
+        printf("Found UUID: %s\n", matchingUUID);
+    }
+    else
+    {
+        printf("No UUID found\n");
     }
 
     mysql_free_result(result);
