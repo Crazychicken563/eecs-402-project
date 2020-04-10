@@ -37,10 +37,6 @@ char* getUUIDForIP(MYSQL* con, char* ipAddr) {
 
     mysql_free_result(result);
     printf("No UUID found, must generate\n");
-    return generateUUID();
-}
-
-char* generateUUID() {
     return system("uuidgen -r");
 }
 
