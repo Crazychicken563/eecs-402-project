@@ -2,13 +2,35 @@
 #include <mysql.h>
 #include <stdio.h>
 #include <string.h>
-#include <uuid/uuid.h>
 
 void finish_with_error(MYSQL *con)
 {
     fprintf(stderr, "%s\n", mysql_error(con));
     mysql_close(con);
     exit(1);
+}
+
+static char *rand_string(char *str, size_t size)
+{
+    const char charset[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    if (size) {
+        --size;
+        for (size_t n = 0; n < size; n++) {
+            int key = rand() % (int) (sizeof charset - 1);
+            str[n] = charset[key];
+        }
+        str[size] = '\0';
+    }
+    return str;
+}
+
+char* rand_string_alloc(size_t size)
+{
+     char *s = malloc(size + 1);
+     if (s) {
+         rand_string(s, size);
+     }
+     return s;
 }
 
 char* getUUIDForIP(MYSQL* con, char* ipAddr) {
@@ -40,16 +62,7 @@ char* getUUIDForIP(MYSQL* con, char* ipAddr) {
     mysql_free_result(result);
     printf("No UUID found, must generate\n");
 
-    // typedef unsigned char uuid_t[16];
-    uuid_t uuid;
-
-    uuid_generate_time_safe(uuid);
-
-    char uuid_str[37];
-    uuid_unparse_upper(uuid, uuid_str);
-    printf("generate uuid=%s\n", uuid_str);
-
-    return "Fuck whatever";
+    return rand_string_alloc(36);
 }
 
 int main(int argc, char **argv)
