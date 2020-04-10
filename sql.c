@@ -2,6 +2,7 @@
 #include <mysql.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctime>
 
 void finish_with_error(MYSQL *con)
 {
@@ -78,6 +79,8 @@ char* getUUIDForIP(MYSQL* con, char* ipAddr) {
 
 int main(int argc, char **argv)
 {
+    srand ( time(NULL) );
+
     printf("MySQL client version: %s\n", mysql_get_client_info());
     MYSQL *con = mysql_init(NULL);
 
