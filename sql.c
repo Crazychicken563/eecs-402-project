@@ -62,7 +62,7 @@ char* getUUIDForIP(MYSQL* con, char* ipAddr) {
     mysql_free_result(result);
     printf("No UUID found, must generate\n");
 
-    char *id = malloc(37);
+    char *id = malloc(500);
     strcat(id, rand_string_alloc(8));
     strcat(id, "-");
     strcat(id, rand_string_alloc(4));
