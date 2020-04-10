@@ -9,7 +9,7 @@ void finish_with_error(MYSQL *con)
     exit(1);
 }
 
-char* getUUIDForIP(MYSQL con, char* ipAddr) {
+char* getUUIDForIP(MYSQL* con, char* ipAddr) {
     char q[1000] = "SELECT * FROM ipmap WHERE ip='";
     strcat(q, ipAddr);
     strcat(q, "'");
@@ -31,9 +31,11 @@ char* getUUIDForIP(MYSQL con, char* ipAddr) {
 
     while ((row = mysql_fetch_row(result))) 
     {
-        return row[1];
+        mysql_free_result(result);
+	return row[1];
     }
 
+    mysql_free_result(result);
     printf("No UUID found\n");
     return "GENERATE_ME";
 }
@@ -60,7 +62,6 @@ int main(int argc, char **argv)
     getUUIDForIP(con, "127.0.0.1");
     getUUIDForIP(con, "127.0.0.2");
 
-    mysql_free_result(result);
     mysql_close(con);
 
     exit(0);
