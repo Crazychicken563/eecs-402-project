@@ -43,14 +43,13 @@ char* getUUIDForIP(MYSQL* con, char* ipAddr) {
     // typedef unsigned char uuid_t[16];
     uuid_t uuid;
 
-    // generate
     uuid_generate_time_safe(uuid);
 
-    // unparse (to string)
-    char uuid_str[37];      // ex. "1b4e28ba-2fa1-11d2-883f-0016d3cca427" + "\0"
+    char uuid_str[37];
     uuid_unparse_upper(uuid, uuid_str);
+    printf("generate uuid=%s\n", uuid_str);
 
-    return uuid_str;
+    return "Fuck whatever";
 }
 
 int main(int argc, char **argv)
