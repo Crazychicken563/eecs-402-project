@@ -62,7 +62,19 @@ char* getUUIDForIP(MYSQL* con, char* ipAddr) {
     mysql_free_result(result);
     printf("No UUID found, must generate\n");
 
-    return rand_string_alloc(36);
+    char id[1000] = "";
+    strcat(id, rand_string_alloc(8));
+    strcat(id, "-");
+    strcat(id, rand_string_alloc(4));
+    strcat(id, "-");
+    strcat(id, rand_string_alloc(4));
+    strcat(id, "-");
+    strcat(id, rand_string_alloc(4));
+    strcat(id, "-");
+    strcat(id, rand_string_alloc(12));
+    strcat(id, "-");
+
+    return id;
 }
 
 int main(int argc, char **argv)
@@ -84,8 +96,8 @@ int main(int argc, char **argv)
         finish_with_error(con);
     }
 
-    printf("%s", getUUIDForIP(con, "127.0.0.1"));
-    printf("%s", getUUIDForIP(con, "127.0.0.2"));
+    printf("%s\n", getUUIDForIP(con, "127.0.0.1"));
+    printf("%s\n", getUUIDForIP(con, "127.0.0.2"));
 
     mysql_close(con);
 
