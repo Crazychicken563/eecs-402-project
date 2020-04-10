@@ -1,9 +1,6 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include <my_global.h>
 #include <mysql.h>
 #include <string.h>
-#include <uuid/uuid.h>
 
 void finish_with_error(MYSQL *con)
 {
@@ -44,12 +41,7 @@ char* getUUIDForIP(MYSQL* con, char* ipAddr) {
 }
 
 char* generateUUID() {
-    uuid_t binuuid;
-    uuid_generate_random(binuuid);
-    char *uuid = malloc(37);
-    uuid_unparse_upper(binuuid, uuid);
-    puts(uuid);
-    return uuid;
+    return system("uuidgen -r");
 }
 
 int main(int argc, char **argv)
